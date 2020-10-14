@@ -1,0 +1,17 @@
+[package]
+name = "cargo-fak"
+version = "0.1.0"
+authors = ["thelastinuit <email@luisignac.io>"]
+edition = "2018"
+keywords = ["cargo-fak", "cargo", "adr"]
+description = "Cargo Faaaaaak! is an ADR tool for your Rust projects. You don't need to help, you are human and therefore limited. What you need is better tools, Cargo Faaaaaak! aims to help you out."
+homepage = "https://github.com/thelastinuit/cargo-fak"
+repository = "https://github.com/thelastinuit/cargo-fak"
+documentation = "https://github.com/thelastinuit/cargo-fak"
+license = "MIT"
+readme = "README.md"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+clap = "2.33.3"
