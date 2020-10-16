@@ -1,11 +1,18 @@
 #[macro_use]
 extern crate clap;
 
+use clap::{App, AppSettings, Arg, SubCommand};
 use std::fs;
-use std::path::Path;
-use clap::{App, AppSettings, SubCommand, Arg};
-use std::time::SystemTime;
+use std::fs::File;
 use std::io::Write;
+use std::path::Path;
+use std::time::SystemTime;
+
+static ADR: &str = "#### Context
+#### Decision
+#### Status
+#### Consequences
+";
 
 fn main() -> std::io::Result<()> {
     let key: u64;
@@ -38,14 +45,15 @@ fn main() -> std::io::Result<()> {
         Err(_) => panic!("SystemTime before UNIX EPOCH!"),
     }
 
-    println!("{:?} {:?}", key, title);
-
     let directory: &str = "./docs/adr";
     fs::create_dir_all(directory)?;
-    let filepath = Path::new(&format!("{}/{}_{}.md", directory, key, title).to_string());
-    let mut file = std::fs::File::create(filepath).expect("create failed");
-    file.write_all("Hello World".as_bytes()).expect("write failed");
-    file.write_all("\nTutorialsPoint".as_bytes()).expect("write failed");
+    let filepath = format!("{}/{}_{}.md", directory, key, title).to_string();
+    let path = Path::new(&filepath);
+    let display = path.display();
+    let mut file = match File::create(&path) {
+        Err(why) => panic!("couldn't create {}: {}", display, why),
+        Ok(file) => file,
+    };
 
-    Ok(())
+    file.write_all(ADR.as_bytes())
 }
