@@ -4,6 +4,9 @@
 
 
 # Cargo Faaaaaak!
+
+[![Build Status](https://travis-ci.com/thelastinuit/cargo-fak.svg?branch=main)](https://travis-ci.com/thelastinuit/cargo-fak)
+
 - Are you tired of your past persona making decisions that make no sense?
 - Are you often asking yourself: why did I make that decision? 
 
