@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate clap;
 
-use clap::{App, AppSettings, Arg, SubCommand};
+use clap::{App, AppSettings, Arg, SubCommand, ArgMatches};
 use std::fs;
 use std::fs::File;
 use std::io::Write;
@@ -13,12 +13,10 @@ static ADR: &str = "#### Context
 #### Status
 #### Consequences
 ";
+static DIRECTORY: &str = "./docs/adr";
 
-fn main() -> std::io::Result<()> {
-    let key: u64;
-    let title: &str;
-
-    let matches = App::new("cargo-fak")
+fn get_matches<'a>() -> ArgMatches<'a> {
+    App::new("cargo-fak")
         .bin_name("cargo")
         .setting(AppSettings::SubcommandRequired)
         .version(concat!("v", crate_version!()))
@@ -28,32 +26,43 @@ fn main() -> std::io::Result<()> {
             .arg(Arg::with_name("TITLE")
                 .help("A title of your ADR")
                 .required(true)))
-        .get_matches();
+        .get_matches()
+}
 
-    if let Some(matches) = matches.subcommand_matches("adr") {
-        if matches.is_present("TITLE") {
-            title = matches.value_of("TITLE").unwrap();
-        } else {
-            title = &"No title"
-        }
-    } else {
-        title = &"No title"
-    }
-
+fn get_key() -> u64 {
     match SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
-        Ok(n) => key = n.as_secs(),
+        Ok(n) => n.as_secs(),
         Err(_) => panic!("SystemTime before UNIX EPOCH!"),
     }
+}
 
-    let directory: &str = "./docs/adr";
-    fs::create_dir_all(directory)?;
-    let filepath = format!("{}/{}_{}.md", directory, key, title).to_string();
+fn get_title<'a>(matches: &'a ArgMatches) -> &'a str {
+    if let Some(matches) = matches.subcommand_matches("adr") {
+        if matches.is_present("TITLE") {
+            matches.value_of("TITLE").unwrap()
+        } else {
+            &"No title"
+        }
+    } else {
+        &"No title"
+    }
+}
+
+fn get_file(key: u64, title: &str) -> File {
+    let filepath = format!("{}/{}_{}.md", DIRECTORY, key, title).to_string();
     let path = Path::new(&filepath);
     let display = path.display();
-    let mut file = match File::create(&path) {
+    match File::create(&path) {
         Err(why) => panic!("couldn't create {}: {}", display, why),
         Ok(file) => file,
-    };
+    }
+}
 
+fn main() -> std::io::Result<()> {
+    fs::create_dir_all(DIRECTORY)?;
+    let matches = get_matches();
+    let key = get_key();
+    let title = get_title(&matches);
+    let mut file = get_file(key, title);
     file.write_all(ADR.as_bytes())
 }
