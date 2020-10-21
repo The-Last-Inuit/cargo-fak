@@ -1,6 +1,6 @@
 [package]
 name = "cargo-fak"
-version = "1.0.2"
+version = "1.0.3"
 authors = ["thelastinuit <email@luisignac.io>"]
 edition = "2018"
 keywords = ["cargo-fak", "cargo", "adr"]
