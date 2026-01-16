@@ -2,9 +2,9 @@
 name = "cargo-fak"
 version = "1.0.3"
 authors = ["thelastinuit <email@luisignac.io>"]
-edition = "2018"
+edition = "2021"
 keywords = ["cargo-fak", "cargo", "adr"]
-description = "Cargo Faaaaaak! is an ADR tool for your Rust projects. You don't need to help, you are human and therefore limited. What you need is better tools, Cargo Faaaaaak! aims to help you out."
+description = "Cargo Faaaaaak! is an ADR/RFC tool for your Rust projects. You don't need to help, you are human and therefore limited. What you need is better tools, Cargo Faaaaaak! aims to help you out."
 homepage = "https://github.com/thelastinuit/cargo-fak"
 repository = "https://github.com/thelastinuit/cargo-fak"
 documentation = "https://github.com/thelastinuit/cargo-fak"
@@ -14,4 +14,5 @@ readme = "README.md"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-clap = "2.33.3"
+anyhow = "1.0"
+clap = { version = "4.5.3", features = ["derive", "env"] }
